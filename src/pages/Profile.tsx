@@ -1,6 +1,7 @@
 import { ChevronRight, Settings, Star, UserCircle2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
+import { SubPageHeader } from '../components/layout/SubPageHeader';
 
 function shortStatusLabel(educationStatus: string) {
   if (educationStatus.includes('대학교')) return '대학생';
@@ -15,24 +16,29 @@ export function Profile() {
 
   if (!isLoggedIn || !profile) {
     return (
-      <div className="flex flex-col items-center justify-center gap-3 px-6 py-24 text-center">
-        <UserCircle2 size={48} className="text-[var(--color-border)]" />
-        <p className="font-bold text-[var(--color-navy)]">로그인이 필요해요</p>
-        <p className="text-sm text-[var(--color-muted)]">
-          로그인하면 맞춤 추천과 스크랩 기능을 이용할 수 있어요.
-        </p>
-        <button
-          onClick={() => navigate('/login')}
-          className="mt-2 rounded-xl bg-[var(--color-primary)] px-6 py-2.5 text-white font-semibold"
-        >
-          로그인 하러 가기
-        </button>
+      <div className="flex flex-col">
+        <SubPageHeader title="프로필" />
+        <div className="flex flex-col items-center justify-center gap-3 px-6 py-24 text-center">
+          <UserCircle2 size={48} className="text-[var(--color-border)]" />
+          <p className="font-bold text-[var(--color-navy)]">로그인이 필요해요</p>
+          <p className="text-sm text-[var(--color-muted)]">
+            로그인하면 맞춤 추천과 스크랩 기능을 이용할 수 있어요.
+          </p>
+          <button
+            onClick={() => navigate('/login')}
+            className="mt-2 rounded-xl bg-[var(--color-primary)] px-6 py-2.5 text-white font-semibold"
+          >
+            로그인 하러 가기
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="px-4 pt-4 pb-10 flex flex-col gap-6">
+    <div className="flex flex-col">
+      <SubPageHeader title="프로필" />
+      <div className="px-4 pb-10 flex flex-col gap-6">
       <div className="flex items-center gap-3">
         <div className="h-14 w-14 rounded-full bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-mint)] flex items-center justify-center">
           <UserCircle2 size={32} className="text-white" />
@@ -91,6 +97,7 @@ export function Profile() {
       >
         로그아웃
       </button>
+      </div>
     </div>
   );
 }

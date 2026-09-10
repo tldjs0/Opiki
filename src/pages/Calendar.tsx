@@ -5,6 +5,7 @@ import { mockBenefits } from '../mocks/benefits';
 import { useScrapStore } from '../store/useScrapStore';
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { CategoryIcon } from '../components/ui/CategoryIcon';
+import { SubPageHeader } from '../components/layout/SubPageHeader';
 
 const WEEKDAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const BAR_COLORS = ['#ff9f5a', '#6ee2c8', '#5b8cff', '#8b5cf6', '#ff6b9d'];
@@ -87,7 +88,9 @@ export function CalendarPage() {
   }, [weeks, rangedBenefits, year, month]);
 
   return (
-    <div className="px-4 pt-4 pb-10 flex flex-col gap-6">
+    <div className="flex flex-col">
+      <SubPageHeader title="캘린더" />
+      <div className="px-4 pb-10 flex flex-col gap-6">
       {/* 월 이동 */}
       <div className="flex items-center justify-center gap-6">
         <button onClick={() => setViewDate(new Date(year, month - 1, 1))} aria-label="이전 달">
@@ -182,6 +185,7 @@ export function CalendarPage() {
           </div>
         )}
       </section>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Star, Clock } from 'lucide-react';
 import { mockNotifications } from '../mocks/user';
+import { SubPageHeader } from '../components/layout/SubPageHeader';
 
 type Tab = 'all' | 'deadline' | 'notice';
 
@@ -28,9 +29,9 @@ export function Notifications() {
   }, [tab]);
 
   return (
-    <div className="px-4 pt-4 pb-10 flex flex-col gap-4">
-      <h1 className="text-lg font-bold text-[var(--color-navy)]">알림 내역</h1>
-
+    <div className="flex flex-col">
+      <SubPageHeader title="알림 내역" />
+      <div className="px-4 pb-10 flex flex-col gap-4">
       <div className="flex gap-5 border-b border-[var(--color-border)]">
         {tabs.map((t) => (
           <button
@@ -76,6 +77,7 @@ export function Notifications() {
             <p className="py-10 text-center text-sm text-[var(--color-muted)]">알림이 없어요.</p>
           )}
         </div>
+      </div>
       </div>
     </div>
   );

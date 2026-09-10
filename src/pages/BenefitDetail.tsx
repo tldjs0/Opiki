@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ChevronLeft, Share2, Star } from 'lucide-react';
+import { Share2, Star } from 'lucide-react';
 import { mockBenefits, mockComparisonGroups } from '../mocks/benefits';
 import { StatusBadge } from '../components/ui/StatusBadge';
+import { SubPageHeader } from '../components/layout/SubPageHeader';
 import { useScrapStore } from '../store/useScrapStore';
 import { useRecentViewStore } from '../store/useRecentViewStore';
 import { buildSummarySections } from '../utils/summarize';
@@ -43,30 +44,29 @@ export function BenefitDetail() {
   return (
     <div className="flex flex-col min-h-full">
       {/* 상단바: 뒤로가기 + 타이틀 + 상세/요약 토글 */}
-      <div className="flex items-center justify-between px-4 py-3">
-        <button onClick={() => navigate(-1)} aria-label="뒤로가기">
-          <ChevronLeft size={24} className="text-[var(--color-navy)]" />
-        </button>
-        <span className="font-bold text-[15px] text-[var(--color-navy)]">혜택 상세</span>
-        <div className="flex items-center rounded-full bg-[var(--color-bg)] p-1 text-xs font-semibold">
-          <button
-            onClick={() => setMode('detail')}
-            className={`rounded-full px-3 py-1 transition-colors ${
-              mode === 'detail' ? 'bg-[var(--color-primary)] text-white' : 'text-[var(--color-muted)]'
-            }`}
-          >
-            상세
-          </button>
-          <button
-            onClick={() => setMode('summary')}
-            className={`rounded-full px-3 py-1 transition-colors ${
-              mode === 'summary' ? 'bg-[var(--color-primary)] text-white' : 'text-[var(--color-muted)]'
-            }`}
-          >
-            요약
-          </button>
-        </div>
-      </div>
+      <SubPageHeader
+        title="혜택 상세"
+        right={
+          <div className="flex items-center rounded-full bg-[var(--color-bg)] p-1 text-xs font-semibold">
+            <button
+              onClick={() => setMode('detail')}
+              className={`rounded-full px-3 py-1 transition-colors ${
+                mode === 'detail' ? 'bg-[var(--color-primary)] text-white' : 'text-[var(--color-muted)]'
+              }`}
+            >
+              상세
+            </button>
+            <button
+              onClick={() => setMode('summary')}
+              className={`rounded-full px-3 py-1 transition-colors ${
+                mode === 'summary' ? 'bg-[var(--color-primary)] text-white' : 'text-[var(--color-muted)]'
+              }`}
+            >
+              요약
+            </button>
+          </div>
+        }
+      />
 
       <div className="flex-1 px-4 pb-28 flex flex-col gap-5">
         {/* 카드 헤더 */}

@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ChevronLeft, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { mockBenefits } from '../mocks/benefits';
 import { useAuthStore } from '../store/useAuthStore';
 import { ComingSoon } from '../components/ui/ComingSoon';
+import { SubPageHeader } from '../components/layout/SubPageHeader';
 
 interface Variant {
   name: string;
@@ -50,13 +51,9 @@ export function BenefitCompare() {
     profile && profile.age >= 19 && profile.age <= 34 ? '청년 (만 19~34세)' : '일반 이용자';
 
   return (
-    <div className="px-4 pt-4 pb-10 flex flex-col gap-5">
-      <div className="flex items-center gap-2">
-        <button onClick={() => navigate(-1)} aria-label="뒤로가기">
-          <ChevronLeft size={24} className="text-[var(--color-navy)]" />
-        </button>
-        <h1 className="font-bold text-[var(--color-navy)]">{benefit.title} 비교</h1>
-      </div>
+    <div className="flex flex-col">
+      <SubPageHeader title={`${benefit.title} 비교`} />
+      <div className="px-4 pb-10 flex flex-col gap-5">
 
       <div className="rounded-2xl bg-[var(--color-bg)] p-4 flex items-start gap-2">
         <Sparkles size={18} className="text-[var(--color-primary)] shrink-0 mt-0.5" />
@@ -104,6 +101,7 @@ export function BenefitCompare() {
       >
         혜택 상세로 돌아가기
       </button>
+      </div>
     </div>
   );
 }

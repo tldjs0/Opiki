@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Star, UserCircle2 } from 'lucide-react';
 import { mockBenefits, mockComparisonGroups } from '../mocks/benefits';
 import { BenefitCard } from '../components/ui/BenefitCard';
+import { SubPageHeader } from '../components/layout/SubPageHeader';
 import { useAuthStore } from '../store/useAuthStore';
 import { useScrapStore } from '../store/useScrapStore';
 import { recommendFromGroup } from '../utils/recommend';
@@ -42,24 +43,29 @@ export function Scrap() {
 
   if (!isLoggedIn) {
     return (
-      <div className="flex flex-col items-center justify-center gap-3 px-6 py-24 text-center">
-        <UserCircle2 size={48} className="text-[var(--color-border)]" />
-        <p className="font-bold text-[var(--color-navy)]">로그인이 필요해요</p>
-        <p className="text-sm text-[var(--color-muted)]">
-          로그인하면 내 상황에 맞는 추천과 스크랩 목록을 볼 수 있어요.
-        </p>
-        <button
-          onClick={() => navigate('/login')}
-          className="mt-2 rounded-xl bg-[var(--color-primary)] px-6 py-2.5 text-white font-semibold"
-        >
-          로그인 하러 가기
-        </button>
+      <div className="flex flex-col">
+        <SubPageHeader title="즐겨찾기" />
+        <div className="flex flex-col items-center justify-center gap-3 px-6 py-24 text-center">
+          <UserCircle2 size={48} className="text-[var(--color-border)]" />
+          <p className="font-bold text-[var(--color-navy)]">로그인이 필요해요</p>
+          <p className="text-sm text-[var(--color-muted)]">
+            로그인하면 내 상황에 맞는 추천과 스크랩 목록을 볼 수 있어요.
+          </p>
+          <button
+            onClick={() => navigate('/login')}
+            className="mt-2 rounded-xl bg-[var(--color-primary)] px-6 py-2.5 text-white font-semibold"
+          >
+            로그인 하러 가기
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="px-4 pt-4 pb-10 flex flex-col gap-6">
+    <div className="flex flex-col">
+      <SubPageHeader title="즐겨찾기" />
+      <div className="px-4 pb-10 flex flex-col gap-6">
       {/* 내 상황 요약 */}
       {profile && (
         <div className="rounded-2xl bg-[var(--color-bg)] p-4">
@@ -145,6 +151,7 @@ export function Scrap() {
           </div>
         )}
       </section>
+      </div>
     </div>
   );
 }

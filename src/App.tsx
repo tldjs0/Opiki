@@ -17,21 +17,21 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* 상단 공통 헤더 + 하단 네비게이션이 있는 화면 */}
+        {/* 홈만 공통 헤더(Opiki 로고 + 아이콘)를 사용 — Figma 기준 */}
         <Route element={<AppLayout />}>
           <Route path="/" element={<Home />} />
+        </Route>
+
+        {/* 그 외 모든 화면은 "뒤로가기 + 타이틀" 상단바 + 하단 네비게이션 유지 */}
+        <Route element={<SubPageLayout />}>
+          <Route path="/benefits/:id" element={<BenefitDetail />} />
+          <Route path="/benefits/:id/compare" element={<BenefitCompare />} />
           <Route path="/scraps" element={<Scrap />} />
           <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/ai" element={<AIChat />} />
           <Route path="/recent" element={<RecentViews />} />
           <Route path="/profile" element={<Profile />} />
-        </Route>
-
-        {/* 화면 자체 상단바(뒤로가기 등) + 하단 네비게이션만 있는 화면 */}
-        <Route element={<SubPageLayout />}>
-          <Route path="/benefits/:id" element={<BenefitDetail />} />
-          <Route path="/benefits/:id/compare" element={<BenefitCompare />} />
         </Route>
 
         {/* 하단 네비게이션이 없는 화면 */}

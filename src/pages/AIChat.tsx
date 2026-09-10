@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Send, Sparkles } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { mockBenefits } from '../mocks/benefits';
 import { BenefitCard } from '../components/ui/BenefitCard';
+import { SubPageHeader } from '../components/layout/SubPageHeader';
 import type { Benefit } from '../types/benefit';
 
 interface ChatMessage {
@@ -65,10 +66,7 @@ export function AIChat() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center gap-2 px-4 py-3">
-        <Sparkles size={18} className="text-[var(--color-primary)]" />
-        <h1 className="font-bold text-[var(--color-navy)]">AI 상담원</h1>
-      </div>
+      <SubPageHeader title="AI 상담원" />
 
       <div className="flex-1 overflow-y-auto px-4 flex flex-col gap-3 pb-4">
         {messages.map((m) => (
