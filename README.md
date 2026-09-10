@@ -56,6 +56,7 @@ npm run build    # 프로덕션 빌드
 
 ## 문서
 
+- [AGENT.md](./AGENT.md) — AI 에이전트/새 작업자가 작업 전 반드시 읽어야 하는 가이드
 - [기획/설계 문서](./docs/planning) — PRD, IA, ERD, API 명세, 아키텍처, 비기능요구사항
 - [작업 진행 기록](./docs/handover) — 단계별 작업 요약 및 인수인계 문서
 
