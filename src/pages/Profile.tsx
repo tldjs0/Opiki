@@ -2,6 +2,13 @@ import { ChevronRight, Settings, Star, UserCircle2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 
+function shortStatusLabel(educationStatus: string) {
+  if (educationStatus.includes('대학교')) return '대학생';
+  if (educationStatus.includes('고등학교')) return '고등학생';
+  if (educationStatus.includes('대학원')) return '대학원생';
+  return educationStatus || '정보 미입력';
+}
+
 export function Profile() {
   const navigate = useNavigate();
   const { isLoggedIn, profile, logout } = useAuthStore();
@@ -32,7 +39,7 @@ export function Profile() {
         </div>
         <div className="flex-1">
           <p className="font-bold text-[var(--color-navy)]">{profile.nickname} 님</p>
-          <p className="text-xs text-[var(--color-muted)]">{profile.educationStatus || '정보 미입력'}</p>
+          <p className="text-xs text-[var(--color-muted)]">{shortStatusLabel(profile.educationStatus)}</p>
         </div>
         <button aria-label="설정" className="text-[var(--color-muted)]">
           <Settings size={20} />

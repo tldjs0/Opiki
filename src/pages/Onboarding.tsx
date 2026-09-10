@@ -1,7 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ChevronDown, Search } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import type { UserProfile } from '../types/user';
+
+const AGE_OPTIONS = Array.from({ length: 27 }, (_, i) => `${14 + i}세`);
+const REGION_OPTIONS = ['안양시', '서울특별시', '수원시', '성남시', '인천광역시', '기타'];
+const INCOME_OPTIONS = ['1분위', '2분위', '3분위', '4분위', '5분위', '6분위', '7분위', '8분위', '9분위', '10분위', '해당없음'];
+const EDUCATION_OPTIONS = ['중학교 재학', '고등학교 재학', '대학교 재학', '대학교 졸업', '대학원 재학/졸업', '기타'];
+const MAJOR_OPTIONS = ['공학계열', '인문계열', '자연계열', '사회계열', '예체능계열', '기타'];
+const EMPLOYMENT_OPTIONS = ['미취업', '재직중', '창업 준비중', '구직중'];
+const SPECIALTY_OPTIONS = ['해당없음', 'IT·개발', '디자인', '마케팅', '금융', '제조', '기타'];
 
 const initialForm: UserProfile = {
   nickname: '',
@@ -42,120 +51,97 @@ export function Onboarding() {
 
   return (
     <div className="px-6 pt-6 pb-28 flex flex-col gap-6 relative">
-      <h1 className="text-xl font-bold text-[var(--color-navy)]">프로필</h1>
+      <h1 className="text-xl font-bold text-[var(--color-navy)] text-center">프로필</h1>
 
       <Field label="닉네임" required>
         <input
-          className="input"
+          className="input-filled"
           placeholder="어떻게 불러드리면 될까요?"
           value={form.nickname}
           onChange={(e) => update('nickname', e.target.value)}
         />
       </Field>
 
-      <div>
-        <p className="text-sm font-bold text-[var(--color-navy)] mb-3">기본 정보</p>
-        <div className="flex flex-col gap-4">
-          <Field label="성명" required>
-            <input
-              className="input"
-              placeholder="성명을 입력해 주세요."
-              value={form.name}
-              onChange={(e) => update('name', e.target.value)}
+      <SectionBox title="기본 정보">
+        <Field label="성명" required>
+          <input
+            className="input-filled"
+            placeholder="성명을 입력해 주세요."
+            value={form.name}
+            onChange={(e) => update('name', e.target.value)}
+          />
+        </Field>
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="나이" required>
+            <SelectField
+              value={form.age ? `${form.age}세` : ''}
+              onChange={(v) => update('age', Number(v.replace('세', '')))}
+              options={AGE_OPTIONS}
             />
           </Field>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="나이" required>
-              <input
-                type="number"
-                className="input"
-                value={form.age}
-                onChange={(e) => update('age', Number(e.target.value))}
-              />
-            </Field>
-            <Field label="거주지" required>
-              <input
-                className="input"
-                placeholder="예: 안양시"
-                value={form.region}
-                onChange={(e) => update('region', e.target.value)}
-              />
-            </Field>
-          </div>
-          <Field label="상세 주소">
+          <Field label="거주지" required>
+            <SelectField value={form.region} onChange={(v) => update('region', v)} options={REGION_OPTIONS} />
+          </Field>
+        </div>
+        <Field label="상세 주소">
+          <div className="relative">
             <input
-              className="input"
+              className="input-filled pr-10"
               placeholder="주소를 입력해 주세요."
               value={form.addressDetail}
               onChange={(e) => update('addressDetail', e.target.value)}
             />
-          </Field>
-        </div>
-      </div>
+            <Search size={16} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--color-muted)]" />
+          </div>
+        </Field>
+      </SectionBox>
 
-      <div>
-        <p className="text-sm font-bold text-[var(--color-navy)] mb-3">상황 정보</p>
-        <div className="flex flex-col gap-4">
-          <Field label="소득 분위">
-            <input
-              className="input"
-              placeholder="예: 9분위"
-              value={form.incomeLevel}
-              onChange={(e) => update('incomeLevel', e.target.value)}
-            />
-          </Field>
-          <Field label="학력" required>
-            <input
-              className="input"
-              placeholder="예: 대학교 재학"
-              value={form.educationStatus}
-              onChange={(e) => update('educationStatus', e.target.value)}
-            />
-          </Field>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="학교">
+      <SectionBox title="상황 정보">
+        <Field label="소득 분위">
+          <SelectField value={form.incomeLevel ?? ''} onChange={(v) => update('incomeLevel', v)} options={INCOME_OPTIONS} />
+        </Field>
+        <Field label="학력" required>
+          <SelectField
+            value={form.educationStatus}
+            onChange={(v) => update('educationStatus', v)}
+            options={EDUCATION_OPTIONS}
+          />
+        </Field>
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="학교">
+            <div className="relative">
               <input
-                className="input"
+                className="input-filled pr-10"
                 placeholder="재학중인 경우"
                 value={form.school}
                 onChange={(e) => update('school', e.target.value)}
               />
-            </Field>
-            <Field label="전공">
-              <input
-                className="input"
-                placeholder="학과"
-                value={form.major}
-                onChange={(e) => update('major', e.target.value)}
-              />
-            </Field>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="취업 여부" required>
-              <input
-                className="input"
-                placeholder="예: 미취업"
-                value={form.employmentStatus}
-                onChange={(e) => update('employmentStatus', e.target.value)}
-              />
-            </Field>
-            <Field label="특화 분야">
-              <input
-                className="input"
-                placeholder="선택"
-                value={form.specialty}
-                onChange={(e) => update('specialty', e.target.value)}
-              />
-            </Field>
-          </div>
+              <Search size={16} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--color-muted)]" />
+            </div>
+          </Field>
+          <Field label="전공">
+            <SelectField value={form.major ?? ''} onChange={(v) => update('major', v)} options={MAJOR_OPTIONS} />
+          </Field>
         </div>
-      </div>
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="취업 여부" required>
+            <SelectField
+              value={form.employmentStatus}
+              onChange={(v) => update('employmentStatus', v)}
+              options={EMPLOYMENT_OPTIONS}
+            />
+          </Field>
+          <Field label="특화 분야">
+            <SelectField value={form.specialty ?? ''} onChange={(v) => update('specialty', v)} options={SPECIALTY_OPTIONS} />
+          </Field>
+        </div>
+      </SectionBox>
 
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white border-t border-[var(--color-border)] px-6 py-3 flex flex-col gap-2">
         <button
           onClick={handleSave}
           disabled={!canSave}
-          className="w-full rounded-xl bg-[var(--color-primary)] py-3.5 text-white font-bold disabled:opacity-40"
+          className="w-full rounded-full bg-[var(--color-primary)] py-3.5 text-white font-bold disabled:opacity-40"
         >
           저장 하기
         </button>
@@ -191,6 +177,15 @@ export function Onboarding() {
   );
 }
 
+function SectionBox({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <p className="text-sm font-bold text-[var(--color-navy)] mb-3">{title}</p>
+      <div className="rounded-2xl border border-[var(--color-border)] p-4 flex flex-col gap-4">{children}</div>
+    </div>
+  );
+}
+
 function Field({
   label,
   required,
@@ -208,5 +203,31 @@ function Field({
       </span>
       {children}
     </label>
+  );
+}
+
+function SelectField({
+  value,
+  onChange,
+  options,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  options: string[];
+}) {
+  return (
+    <div className="relative">
+      <select value={value} onChange={(e) => onChange(e.target.value)} className="input-filled pr-9">
+        <option value="" disabled>
+          선택해 주세요
+        </option>
+        {options.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+      </select>
+      <ChevronDown size={16} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--color-muted)] pointer-events-none" />
+    </div>
   );
 }

@@ -140,7 +140,7 @@ export function Scrap() {
         ) : (
           <div className="flex flex-col gap-2">
             {scrappedBenefits.map((b) => (
-              <BenefitCard key={b.id} benefit={b} />
+              <BenefitCard key={b.id} benefit={b} showCategoryIcon />
             ))}
           </div>
         )}

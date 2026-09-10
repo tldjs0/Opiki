@@ -2,11 +2,13 @@ import { Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { Benefit } from '../../types/benefit';
 import { StatusBadge } from './StatusBadge';
+import { CategoryIcon } from './CategoryIcon';
 import { useScrapStore } from '../../store/useScrapStore';
 
 interface BenefitCardProps {
   benefit: Benefit;
   showScrapButton?: boolean;
+  showCategoryIcon?: boolean;
 }
 
 function formatDateRange(start: string, end: string) {
@@ -14,7 +16,7 @@ function formatDateRange(start: string, end: string) {
   return `${fmt(start)} ~ ${fmt(end)}`;
 }
 
-export function BenefitCard({ benefit, showScrapButton = true }: BenefitCardProps) {
+export function BenefitCard({ benefit, showScrapButton = true, showCategoryIcon = false }: BenefitCardProps) {
   const navigate = useNavigate();
   const isScrapped = useScrapStore((s) => s.isScrapped(benefit.id));
   const toggleScrap = useScrapStore((s) => s.toggleScrap);
@@ -24,6 +26,7 @@ export function BenefitCard({ benefit, showScrapButton = true }: BenefitCardProp
       onClick={() => navigate(`/benefits/${benefit.id}`)}
       className="w-full text-left flex items-center gap-3 rounded-2xl border border-[var(--color-border)] bg-white px-4 py-3 active:scale-[0.99] transition-transform"
     >
+      {showCategoryIcon && <CategoryIcon category={benefit.category} />}
       <div className="flex-1 min-w-0">
         <div className="mb-1">
           <StatusBadge status={benefit.status} dDay={benefit.dDay} />

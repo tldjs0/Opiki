@@ -20,6 +20,7 @@ export interface MockNotification {
   description?: string;
   badge?: string; // 예: D-10, 마감
   timeAgo: string; // 예: "하루 전"
+  starred?: boolean; // 스크랩한 혜택과 관련된 알림 표시
 }
 
 export const mockNotifications: MockNotification[] = [
@@ -30,6 +31,7 @@ export const mockNotifications: MockNotification[] = [
     description: '신청 마감일이 10일 남았어요!',
     badge: 'D-10',
     timeAgo: '하루 전',
+    starred: true,
   },
   {
     id: 'n-2',
@@ -45,6 +47,7 @@ export const mockNotifications: MockNotification[] = [
     description: '신청이 마감되었어요',
     badge: '마감',
     timeAgo: '5일 전',
+    starred: true,
   },
   {
     id: 'n-4',

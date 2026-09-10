@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Bell, Megaphone, Star } from 'lucide-react';
+import { Star, Clock } from 'lucide-react';
 import { mockNotifications } from '../mocks/user';
 
 type Tab = 'all' | 'deadline' | 'notice';
@@ -9,6 +9,14 @@ const tabs: { key: Tab; label: string }[] = [
   { key: 'deadline', label: '마감 임박' },
   { key: 'notice', label: '공지' },
 ];
+
+function badgeStyle(badge: string) {
+  // D-N 등 진행중 뱃지는 민트 아웃라인, 마감은 회색 아웃라인
+  if (badge === '마감') {
+    return 'border border-gray-300 text-gray-400';
+  }
+  return 'border border-[var(--color-mint)] text-emerald-600';
+}
 
 export function Notifications() {
   const [tab, setTab] = useState<Tab>('all');
@@ -23,13 +31,15 @@ export function Notifications() {
     <div className="px-4 pt-4 pb-10 flex flex-col gap-4">
       <h1 className="text-lg font-bold text-[var(--color-navy)]">알림 내역</h1>
 
-      <div className="flex gap-1 rounded-full bg-[var(--color-bg)] p-1">
+      <div className="flex gap-5 border-b border-[var(--color-border)]">
         {tabs.map((t) => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
-            className={`flex-1 rounded-full py-2 text-sm font-semibold transition-colors ${
-              tab === t.key ? 'bg-white text-[var(--color-primary)] shadow-sm' : 'text-[var(--color-muted)]'
+            className={`pb-2.5 text-sm font-semibold border-b-2 -mb-px transition-colors ${
+              tab === t.key
+                ? 'border-[var(--color-primary)] text-[var(--color-primary)]'
+                : 'border-transparent text-[var(--color-muted)]'
             }`}
           >
             {t.label}
@@ -42,26 +52,15 @@ export function Notifications() {
         <div className="flex flex-col divide-y divide-[var(--color-border)]">
           {filtered.map((n) => (
             <div key={n.id} className="flex items-start gap-3 py-3">
-              <span className="mt-0.5 shrink-0 h-8 w-8 rounded-full bg-[var(--color-bg)] flex items-center justify-center">
-                {n.type === 'notice' ? (
-                  <Megaphone size={16} className="text-[var(--color-muted)]" />
-                ) : n.type === 'deadline' ? (
-                  <Bell size={16} className="text-[var(--color-accent)]" />
-                ) : (
-                  <Star size={16} className="text-[var(--color-primary)]" />
-                )}
+              <span className="mt-0.5 shrink-0 w-5 flex flex-col items-center gap-1.5">
+                {n.starred && <Star size={16} className="fill-[var(--color-primary)] text-[var(--color-primary)]" />}
+                {n.badge && <Clock size={15} className="text-[var(--color-muted)]" />}
               </span>
               <div className="flex-1">
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-sm font-semibold text-[var(--color-navy)]">{n.title}</p>
                   {n.badge && (
-                    <span
-                      className={`text-xs font-semibold rounded-full px-2 py-0.5 ${
-                        n.badge === '마감'
-                          ? 'bg-gray-100 text-gray-400'
-                          : 'bg-orange-50 text-[var(--color-accent)]'
-                      }`}
-                    >
+                    <span className={`text-xs font-semibold rounded-full px-2.5 py-0.5 ${badgeStyle(n.badge)}`}>
                       {n.badge}
                     </span>
                   )}

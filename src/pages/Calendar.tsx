@@ -1,15 +1,13 @@
 import { useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, CalendarDays } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { mockBenefits } from '../mocks/benefits';
 import { useScrapStore } from '../store/useScrapStore';
 import { StatusBadge } from '../components/ui/StatusBadge';
-import { useNavigate } from 'react-router-dom';
+import { CategoryIcon } from '../components/ui/CategoryIcon';
 
 const WEEKDAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-
-function toDateKey(d: Date) {
-  return d.toISOString().slice(0, 10);
-}
+const BAR_COLORS = ['#ff9f5a', '#6ee2c8', '#5b8cff', '#8b5cf6', '#ff6b9d'];
 
 function daysInMonth(year: number, month: number) {
   return new Date(year, month + 1, 0).getDate();
@@ -28,24 +26,16 @@ export function CalendarPage() {
     () => mockBenefits.filter((b) => scrappedIds.has(b.id)),
     [scrappedIds],
   );
+  // 기간이 있는(상시가 아닌) 혜택만 캘린더 바 대상
+  const rangedBenefits = useMemo(
+    () => scrappedBenefits.filter((b) => b.status !== 'always'),
+    [scrappedBenefits],
+  );
 
   const [viewDate, setViewDate] = useState(new Date('2026-05-01'));
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
-
-  // 날짜별 이벤트 맵 (신청 시작일/마감일 기준)
-  const eventsByDate = useMemo(() => {
-    const map = new Map<string, typeof mockBenefits>();
-    scrappedBenefits.forEach((b) => {
-      if (b.status === 'always') return;
-      [b.applyStartDate, b.applyEndDate].forEach((dateStr) => {
-        const list = map.get(dateStr) ?? [];
-        if (!list.find((x) => x.id === b.id)) list.push(b);
-        map.set(dateStr, list);
-      });
-    });
-    return map;
-  }, [scrappedBenefits]);
+  const todayKey = '2026-05-19';
 
   const upcoming = useMemo(
     () =>
@@ -57,14 +47,44 @@ export function CalendarPage() {
     [scrappedBenefits],
   );
 
-  const firstWeekday = new Date(year, month, 1).getDay();
-  const totalDays = daysInMonth(year, month);
-  const cells: (number | null)[] = [
-    ...Array(firstWeekday).fill(null),
-    ...Array.from({ length: totalDays }, (_, i) => i + 1),
-  ];
+  // 월 전체를 주(week) 단위로 분할: 각 주는 7칸(day 숫자 또는 null)
+  const weeks = useMemo(() => {
+    const firstWeekday = new Date(year, month, 1).getDay();
+    const totalDays = daysInMonth(year, month);
+    const cells: (number | null)[] = [
+      ...Array(firstWeekday).fill(null),
+      ...Array.from({ length: totalDays }, (_, i) => i + 1),
+    ];
+    while (cells.length % 7 !== 0) cells.push(null);
+    const result: (number | null)[][] = [];
+    for (let i = 0; i < cells.length; i += 7) result.push(cells.slice(i, i + 7));
+    return result;
+  }, [year, month]);
 
-  const todayKey = '2026-05-19';
+  // 각 주(week)마다, 해당 주와 겹치는 혜택 신청기간을 바(bar) 세그먼트로 계산
+  const weekBars = useMemo(() => {
+    return weeks.map((week) => {
+      const bars: { benefitId: string; colStart: number; colEnd: number; color: string }[] = [];
+      rangedBenefits.forEach((b, idx) => {
+        const start = new Date(b.applyStartDate);
+        const end = new Date(b.applyEndDate);
+        let colStart = -1;
+        let colEnd = -1;
+        week.forEach((day, col) => {
+          if (day === null) return;
+          const d = new Date(year, month, day);
+          if (d >= start && d <= end) {
+            if (colStart === -1) colStart = col;
+            colEnd = col;
+          }
+        });
+        if (colStart !== -1) {
+          bars.push({ benefitId: b.id, colStart, colEnd, color: BAR_COLORS[idx % BAR_COLORS.length] });
+        }
+      });
+      return bars;
+    });
+  }, [weeks, rangedBenefits, year, month]);
 
   return (
     <div className="px-4 pt-4 pb-10 flex flex-col gap-6">
@@ -81,34 +101,47 @@ export function CalendarPage() {
         </button>
       </div>
 
-      {/* 달력 그리드 */}
+      {/* 달력 그리드 (주 단위로 렌더링 + 신청기간 바) */}
       <div>
         <div className="grid grid-cols-7 text-center text-[11px] text-[var(--color-muted)] mb-2">
           {WEEKDAYS.map((w) => (
             <span key={w}>{w}</span>
           ))}
         </div>
-        <div className="grid grid-cols-7 gap-y-2 text-center text-sm">
-          {cells.map((day, idx) => {
-            if (day === null) return <span key={idx} />;
-            const dateKey = toDateKey(new Date(year, month, day));
-            const hasEvent = eventsByDate.has(dateKey);
-            const isToday = dateKey === todayKey;
-            return (
-              <div key={idx} className="flex flex-col items-center gap-1">
-                <span
-                  className={`h-7 w-7 flex items-center justify-center rounded-full ${
-                    isToday ? 'bg-[var(--color-primary)] text-white font-bold' : 'text-[var(--color-navy)]'
-                  }`}
-                >
-                  {day}
-                </span>
-                <span
-                  className={`h-1.5 w-1.5 rounded-full ${hasEvent ? 'bg-[var(--color-accent)]' : 'bg-transparent'}`}
-                />
+        <div className="flex flex-col gap-1.5">
+          {weeks.map((week, wIdx) => (
+            <div key={wIdx} className="flex flex-col gap-1">
+              <div className="grid grid-cols-7 text-center text-sm">
+                {week.map((day, dIdx) => {
+                  if (day === null) return <span key={dIdx} />;
+                  const dateKey = new Date(year, month, day).toISOString().slice(0, 10);
+                  const isToday = dateKey === todayKey;
+                  return (
+                    <span
+                      key={dIdx}
+                      className={`mx-auto h-7 w-7 flex items-center justify-center rounded-full ${
+                        isToday ? 'bg-[var(--color-primary)] text-white font-bold' : 'text-[var(--color-navy)]'
+                      }`}
+                    >
+                      {day}
+                    </span>
+                  );
+                })}
               </div>
-            );
-          })}
+              {weekBars[wIdx].map((bar) => (
+                <div key={bar.benefitId} className="grid grid-cols-7">
+                  <span
+                    style={{
+                      gridColumnStart: bar.colStart + 1,
+                      gridColumnEnd: bar.colEnd + 2,
+                      backgroundColor: bar.color,
+                    }}
+                    className="h-[3px] rounded-full mx-1"
+                  />
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
       </div>
 
@@ -132,6 +165,7 @@ export function CalendarPage() {
                 onClick={() => navigate(`/benefits/${b.id}`)}
                 className="w-full text-left flex items-center gap-3 rounded-2xl border border-[var(--color-border)] px-4 py-3"
               >
+                <CategoryIcon category={b.category} />
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm text-[var(--color-navy)] truncate">{b.title}</p>
                   <p className="text-xs text-[var(--color-muted)] truncate">{b.summary}</p>
@@ -139,7 +173,10 @@ export function CalendarPage() {
                     {b.applyStartDate.replaceAll('-', '.')} ~ {b.applyEndDate.replaceAll('-', '.')}
                   </p>
                 </div>
-                <StatusBadge status={b.status} dDay={b.status === 'always' ? undefined : Math.max(calcDDay(b.applyEndDate), 0)} />
+                <StatusBadge
+                  status={b.status}
+                  dDay={b.status === 'always' ? undefined : Math.max(calcDDay(b.applyEndDate), 0)}
+                />
               </button>
             ))}
           </div>
