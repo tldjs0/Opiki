@@ -18,6 +18,7 @@ export function BenefitDetail() {
   const benefit = useMemo(() => mockBenefits.find((b) => b.id === id), [id]);
   const isScrapped = useScrapStore((s) => (benefit ? s.isScrapped(benefit.id) : false));
   const toggleScrap = useScrapStore((s) => s.toggleScrap);
+  const scrappedIds = useScrapStore((s) => s.scrappedIds);
   const addRecentView = useRecentViewStore((s) => s.addRecentView);
 
   useEffect(() => {
@@ -31,10 +32,13 @@ export function BenefitDetail() {
 
   const summarySections = buildSummarySections(benefit);
 
-  // 중복 지원 불가 혜택 그룹에 속해 있고, 같은 그룹의 다른 혜택도 스크랩되어 있는지 여부
-  const comparisonGroup = benefit.comparisonGroupId
-    ? mockComparisonGroups[benefit.comparisonGroupId]
-    : undefined;
+  // 중복 지원 불가 혜택 그룹에 속해 있고, 같은 그룹의 다른 혜택도 스크랩되어 있을 때만 안내
+  const comparisonGroup =
+    benefit.comparisonGroupId &&
+    mockComparisonGroups[benefit.comparisonGroupId]?.benefitIds.filter((bid) => scrappedIds.has(bid))
+      .length >= 2
+      ? mockComparisonGroups[benefit.comparisonGroupId]
+      : undefined;
 
   return (
     <div className="flex flex-col min-h-full">

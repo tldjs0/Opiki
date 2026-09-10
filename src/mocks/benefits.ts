@@ -117,6 +117,47 @@ export const mockBenefits: Benefit[] = [
     viewCount: 5400,
     hasVariants: true,
   },
+  {
+    id: 'b-006',
+    title: '청년도약계좌',
+    summary: '5년 만기, 정부기여금 + 비과세 혜택',
+    category: '생활비',
+    status: 'always',
+    applyStartDate: '2026-01-01',
+    applyEndDate: '2026-12-31',
+    organization: '금융위원회',
+    content:
+      '청년의 중장기 자산형성을 지원하기 위해 5년간 매월 납입 시 정부기여금과 비과세 혜택을 제공하는 적금 상품입니다. 소득이 낮을수록 정부기여금 비율이 높습니다.',
+    eligibility: {
+      age: '만 19세 ~ 34세',
+      income: '개인소득 7,500만원 이하, 가구소득 중위 180% 이하',
+    },
+    applyMethod: '취급 은행 앱을 통한 비대면 가입',
+    applyUrl: 'https://ylife.kinfa.or.kr',
+    viewCount: 4100,
+    comparisonGroupId: 'group-savings',
+  },
+  {
+    id: 'b-007',
+    title: '청년미래적금',
+    summary: '2년 만기, 높은 우대금리 제공',
+    category: '생활비',
+    status: 'always',
+    applyStartDate: '2026-01-01',
+    applyEndDate: '2026-12-31',
+    organization: '서울특별시',
+    content:
+      '2년 동안 매월 일정 금액을 납입하면 서울시가 저축금액의 일부를 추가 적립해주는 청년 자산형성 상품입니다. 청년도약계좌와 중복 가입이 불가능합니다.',
+    eligibility: {
+      age: '만 19세 ~ 34세',
+      region: '서울 거주 또는 근무',
+      income: '기준 중위소득 150% 이하',
+    },
+    applyMethod: '서울시 청년몽땅정보통을 통한 온라인 신청',
+    applyUrl: 'https://youth.seoul.go.kr',
+    viewCount: 2600,
+    comparisonGroupId: 'group-savings',
+  },
 ];
 
 export const mockComparisonGroups: Record<
@@ -126,5 +167,9 @@ export const mockComparisonGroups: Record<
   'group-scholarship': {
     name: '청년 자산형성 상품군',
     benefitIds: ['b-003'],
+  },
+  'group-savings': {
+    name: '청년 자산형성 상품군',
+    benefitIds: ['b-006', 'b-007'],
   },
 };

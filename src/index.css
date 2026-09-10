@@ -36,3 +36,20 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+.input {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  background-color: #ffffff;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: var(--color-navy);
+}
+.input::placeholder {
+  color: var(--color-muted);
+}
+.input:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
