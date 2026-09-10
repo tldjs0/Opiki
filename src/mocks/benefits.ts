@@ -1,0 +1,130 @@
+import type { Benefit } from '../types/benefit';
+
+export const mockBenefits: Benefit[] = [
+  {
+    id: 'b-001',
+    title: '청년 교통비 지원사업',
+    summary: '월 최대 3만 원 x 36개월 지원',
+    category: '생활비',
+    status: 'urgent',
+    dDay: 3,
+    applyStartDate: '2026-05-12',
+    applyEndDate: '2026-05-15',
+    organization: '서울특별시',
+    policyNumber: '20260512005400110900',
+    content:
+      '대중교통을 자주 이용하는 청년의 교통비 부담을 완화하기 위해 월 최대 3만 원, 최장 36개월간 교통비를 지원합니다.',
+    eligibility: {
+      age: '만 19세 ~ 34세',
+      region: '서울 거주',
+      income: '기준 중위소득 150% 이하',
+      note: '대중교통 이용 실적이 있는 경우 우대',
+    },
+    applyMethod: '서울시 청년몽땅정보통 홈페이지를 통해 온라인 신청',
+    applyUrl: 'https://youth.seoul.go.kr',
+    requiredDocuments: '재직/재학 증명서, 소득 증빙 서류',
+    viewCount: 1520,
+    comparisonGroupId: undefined,
+  },
+  {
+    id: 'b-002',
+    title: '의료 기기 규제과학 전문가 양성',
+    summary: '단계별 맞춤 교육을 들을 수 있어요',
+    category: '교육',
+    status: 'always',
+    applyStartDate: '2026-01-01',
+    applyEndDate: '2026-12-31',
+    organization: '한국의료기기안전정보원',
+    policyNumber: '20250617005400110950',
+    content:
+      '의료기기 규제과학(RA) 전문가 양성 교육을 통해 의료기기 산업의 경쟁력을 강화하고, 청년 역량 강화 및 의료기기 규제 분야 진입 장벽 해소를 목표로 교육 프로그램을 운영하고 있습니다. 재직자를 대상으로, 경력 단계별 직무역량에 맞춘 세분화한 교육체계를 운영합니다.\n\n(입문) 최신 규제사항을 반영한 직무 기초 교육\n(실무강화) 현장형 전문인력 양성을 위한 실무 중심 교육\n(고급전략) 최신 의료기기 동향 및 규제사항을 반영한 전문교육',
+    eligibility: {
+      age: '제한없음',
+      region: '전국',
+      income: '무관',
+      education: '제한없음',
+      major: '제한없음',
+      employmentStatus: '재직자',
+      specialty: '제한없음',
+    },
+    applyMethod:
+      '한국의료기기안전정보원 교육자격 홈페이지(edu.nids.or.kr)를 통해 교육신청. 교육프로그램에 따라 신청기간 운영 심사 및 발표. 교육신청 확인 후 개별 통보',
+    applyUrl: 'https://edu.nids.or.kr',
+    requiredDocuments: '-',
+    viewCount: 890,
+  },
+  {
+    id: 'b-003',
+    title: '국가근로장학금 2학기',
+    summary: '단계별 맞춤 교육을 들을 수 있어요',
+    category: '장학금',
+    status: 'urgent',
+    dDay: 19,
+    applyStartDate: '2026-05-01',
+    applyEndDate: '2026-05-31',
+    organization: '한국장학재단',
+    content:
+      '경제적 여건에 관계없이 누구나 의지와 능력에 따라 학업을 지속할 수 있도록 교내외에서 근로장학생으로 참여하며 학자금을 지원받는 제도입니다.',
+    eligibility: {
+      age: '제한없음',
+      region: '전국',
+      income: '기준 중위소득 8구간 이하',
+      education: '대학교 재학',
+    },
+    applyMethod: '한국장학재단 홈페이지를 통한 온라인 신청',
+    applyUrl: 'https://www.kosaf.go.kr',
+    viewCount: 3210,
+    comparisonGroupId: 'group-scholarship',
+  },
+  {
+    id: 'b-004',
+    title: '청년 내일채움 공채',
+    summary: '2년 근속 시 1,200만원 + α',
+    category: '취업·창업',
+    status: 'urgent',
+    dDay: 3,
+    applyStartDate: '2026-05-01',
+    applyEndDate: '2026-05-31',
+    organization: '고용노동부',
+    content:
+      '중소기업에 정규직으로 취업한 청년이 장기근속할 수 있도록 2년간 자산형성을 지원하는 제도입니다. 청년, 기업, 정부가 공동으로 적립하여 만기 시 목돈을 지급합니다.',
+    eligibility: {
+      age: '만 15세 ~ 34세',
+      region: '전국',
+      employmentStatus: '중소기업 정규직 취업자',
+    },
+    applyMethod: '내일채움공제 홈페이지를 통한 온라인 신청',
+    applyUrl: 'https://www.sbcplan.or.kr',
+    viewCount: 2740,
+  },
+  {
+    id: 'b-005',
+    title: 'K패스',
+    summary: '이용 조건에 따라 환급 방식이 달라져요',
+    category: '생활비',
+    status: 'always',
+    applyStartDate: '2026-01-01',
+    applyEndDate: '2026-12-31',
+    organization: '국토교통부',
+    content:
+      '대중교통을 월 15회 이상 이용하면 이용 금액의 일부를 다음 달에 환급해주는 교통카드 서비스입니다. 청년(만 19~34세)은 환급 비율이 일반 사용자보다 높게 적용됩니다.',
+    eligibility: {
+      age: '만 19세 이상 (만 19~34세 청년 우대)',
+      region: '전국',
+    },
+    applyMethod: 'K패스 홈페이지 또는 카드사 앱을 통한 카드 발급 및 등록',
+    applyUrl: 'https://korea-pass.kr',
+    viewCount: 5400,
+    hasVariants: true,
+  },
+];
+
+export const mockComparisonGroups: Record<
+  string,
+  { name: string; benefitIds: string[] }
+> = {
+  'group-scholarship': {
+    name: '청년 자산형성 상품군',
+    benefitIds: ['b-003'],
+  },
+};

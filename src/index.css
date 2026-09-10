@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@theme {
+  /* Opiki 디자인 토큰 (Figma 스타일가이드 기준) */
+  --color-primary: #5b8cff;      /* 브랜드 블루 */
+  --color-mint: #6ee2c8;         /* 민트 (상시/포인트) */
+  --color-accent: #ff9f5a;       /* 오렌지 (마감 임박 D-day) */
+  --color-navy: #1f2a44;         /* 본문/타이틀 텍스트 */
+  --color-muted: #a8b1c7;        /* 보조 텍스트/아이콘 */
+  --color-border: #dde3f3;       /* 구분선/보더 */
+  --color-bg: #f7f9fc;           /* 배경 */
+
+  --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-navy);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 모바일 웹앱 기준 최대 폭 (추후 Android 패키징 대비 중앙 정렬) */
+.app-shell {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #ffffff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
